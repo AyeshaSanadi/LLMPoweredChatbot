@@ -36,6 +36,12 @@ def load_chain():
 def initialize_session_state():
     if "chain" not in st.session_state:
         st.session_state.chain = load_chain()
+    if "user_input" not in st.session_state:
+        st.session_state.user_input = ""
+    if "past" not in st.session_state:
+        st.session_state.past = []
+    if "generated" not in st.session_state:
+        st.session_state.generated = []
 
 
 initialize_session_state()
@@ -52,7 +58,7 @@ st.text_input("You:", key="widget_input", on_change=submit)
 
 
 if st.session_state.user_input:
-    output = st.session_state.chain.invoke(st.session_state.user_input)["text"]
+    output = st.session_state.chain.invoke({"human_input": st.session_state.user_input})["text"]
     st.session_state.past.append(st.session_state.user_input)
     st.session_state.generated.append(output)
     st.session_state.user_input = ""
